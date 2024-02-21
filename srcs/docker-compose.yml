@@ -1,0 +1,103 @@
+version: '3'
+x-DRY: &DRY
+  restart: unless-stopped
+  init: true
+  networks:
+    - inception
+  env_file: ./.env
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    build:
+      context: ./requirements/nginx
+      args:
+        - CERT_PATH=${CERT_PATH}
+        - KEY_PATH=${KEY_PATH}
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    <<: *DRY
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    build: ./requirements/wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    <<: *DRY
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build: ./requirements/mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
+    <<: *DRY
+  redis:
+    container_name: redis
+    image: redis
+    build: ./requirements/bonus/redis
+    depends_on:
+      - wordpress
+    <<: *DRY
+  ftp:
+    container_name: ftp
+    image: ftp
+    build: ./requirements/bonus/ftp
+    ports:
+      - "20-21:20-21"
+      - "4000-4010:4000-4010"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    <<: *DRY
+  website:
+      container_name: website
+      image: website
+      build: ./requirements/bonus/website
+      ports:
+        - "1337:1337"
+      <<: *DRY
+  adminer:
+    container_name: adminer
+    image: adminer
+    build: ./requirements/bonus/adminer
+    ports:
+      - 4242:4242
+    depends_on:
+      - mariadb
+    <<: *DRY
+  portainer:
+    container_name: portainer
+    image: portainer
+    build: ./requirements/bonus/portainer
+    ports:
+      - 9443:9443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
+    <<: *DRY
+networks:
+  inception:
+    name: inception
+volumes:
+  portainer:
+    name: portainer
+  wordpress:
+    name: wordpress
+    driver_opts:
+      type: volume
+      device: ${HOME}/data/wordpress
+      o: bind
+  mariadb:
+    name: mariadb
+    driver_opts:
+      type: volume
+      device: ${HOME}/data/mariadb
+      o: bind
+

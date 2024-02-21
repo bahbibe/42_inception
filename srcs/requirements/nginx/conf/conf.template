@@ -1,0 +1,16 @@
+server {
+    listen				443 ssl;
+    server_name			${WP_URL} www.${WP_URL};
+    ssl_certificate     ${CERT_PATH};
+    ssl_certificate_key ${KEY_PATH};
+    ssl_protocols       TLSv1.1 TLSv1.2 TLSv1.3;
+    index               index.php ;
+    root                /var/www/html/wordpress;
+
+    location ~ \.php$ {
+        include			fastcgi_params;
+        fastcgi_index	index.php;
+        fastcgi_pass	wordpress:9000;
+        fastcgi_param	SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    }
+}
