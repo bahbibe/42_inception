@@ -1,5 +1,4 @@
 #!/bin/sh
-
 sed -i "s/listen = 127.0.0.1:9000/listen = wordpress:9000/" /etc/php81/php-fpm.d/www.conf
 if [ ! -f $PWD/wp-config.php ]; then
 	wp core download
@@ -11,4 +10,5 @@ EOF
 	wp plugin install redis-cache --activate
 	wp redis enable
 fi
+chown -R nobody:nogroup /var/www
 php-fpm81 --nodaemonize

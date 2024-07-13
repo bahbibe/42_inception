@@ -1,4 +1,3 @@
-version: '3'
 x-DRY: &DRY
   restart: unless-stopped
   init: true

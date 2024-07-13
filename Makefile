@@ -1,4 +1,9 @@
 YAML = ./srcs/docker-compose.yml
+VOL_DIR = /home/$(USER)/data
+
+all: up
+	mkdir -p $(VOL_DIR)/wordpress
+	mkdir -p $(VOL_DIR)/mariadb
 
 up: build
 	@docker compose -f $(YAML) up 
@@ -16,6 +21,6 @@ prune: rm
 rm: down
 	@docker rm $$(docker ps -a -q) 2>/dev/null || true
 	@docker volume rm $$(docker volume ls -q) 2>/dev/null || true
-	@sudo rm -rf /home/$(USER)/data/wordpress/*
-	@sudo rm -rf /home/$(USER)/data/mariadb/*
+	@sudo rm -rf $(VOL_DIR)/wordpress/*
+	@sudo rm -rf $(VOL_DIR)/mariadb/*
 re: prune build up
