@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:3.23
 
 ARG BIN="https://github.com/portainer/portainer/releases/download/2.19.4/portainer-2.19.4-linux-amd64.tar.gz"
 

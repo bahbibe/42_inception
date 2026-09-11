@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:3.23
 
 ARG CERT_PATH
 ARG KEY_PATH
