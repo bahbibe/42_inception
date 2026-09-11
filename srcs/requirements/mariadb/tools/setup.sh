@@ -1,24 +1,25 @@
 #!/bin/sh
+set -e
+
+# double single quotes so values are safe inside SQL string literals
+esc() { printf '%s' "$1" | sed "s/'/''/g"; }
+
+mkdir -p /run/mysqld
+chown -R mysql:mysql /run/mysqld /var/lib/mysql
+
 if [ ! -d "/var/lib/mysql/mysql" ]; then
-    rc-service mariadb setup
-    rc-service mariadb start
-    mariadb-secure-installation <<EOF
-$DB_ROOT_PASS
-n
-n
-Y
-Y
-Y
-Y
+    mariadb-install-db --user=mysql --datadir=/var/lib/mysql > /dev/null
+    mariadbd --user=mysql --bootstrap << EOF
+USE mysql;
+FLUSH PRIVILEGES;
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$(esc "$DB_ROOT_PASS")';
+CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
+CREATE USER IF NOT EXISTS '$(esc "$DB_USER")'@'%' IDENTIFIED BY '$(esc "$DB_PASS")';
+GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$(esc "$DB_USER")'@'%';
+FLUSH PRIVILEGES;
 EOF
-    rc-service mariadb restart
-    rc-update add mariadb default
-    mariadb -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" 
-    mariadb -e "CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';" 
-    mariadb -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
-    mariadb -e "FLUSH PRIVILEGES;"
-    rc-service mariadb stop
 fi
 sed -i "s|.*skip-networking.*|#skip-networking|g" /etc/my.cnf.d/mariadb-server.cnf
-mariadbd-safe
-
+exec mariadbd --user=mysql

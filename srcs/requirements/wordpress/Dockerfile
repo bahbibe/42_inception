@@ -1,6 +1,7 @@
 FROM alpine:3.18
 
 ARG WP_CLI="https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
+ENV WP_CLI_ALLOW_ROOT=1
 
 RUN apk update && \
 	apk add --no-cache php php-fpm \

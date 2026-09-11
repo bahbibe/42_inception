@@ -3,7 +3,7 @@ server {
     server_name			${WP_URL} www.${WP_URL};
     ssl_certificate     ${CERT_PATH};
     ssl_certificate_key ${KEY_PATH};
-    ssl_protocols       TLSv1.1 TLSv1.2 TLSv1.3;
+    ssl_protocols       TLSv1.2 TLSv1.3;
     index               index.php ;
     root                /var/www/html/wordpress;
 

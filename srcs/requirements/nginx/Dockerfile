@@ -2,6 +2,7 @@ FROM alpine:3.18
 
 ARG CERT_PATH
 ARG KEY_PATH
+ARG WP_URL
 
 COPY ./conf/conf.template /conf.template
 

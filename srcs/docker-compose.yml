@@ -13,6 +13,7 @@ services:
       args:
         - CERT_PATH=${CERT_PATH}
         - KEY_PATH=${KEY_PATH}
+        - WP_URL=${WP_URL}
     ports:
       - "443:443"
     depends_on:
@@ -89,14 +90,16 @@ volumes:
     name: portainer
   wordpress:
     name: wordpress
+    driver: local
     driver_opts:
-      type: volume
-      device: ${HOME}/data/wordpress
+      type: none
+      device: /home/${USER}/data/wordpress
       o: bind
   mariadb:
     name: mariadb
+    driver: local
     driver_opts:
-      type: volume
-      device: ${HOME}/data/mariadb
+      type: none
+      device: /home/${USER}/data/mariadb
       o: bind
 
