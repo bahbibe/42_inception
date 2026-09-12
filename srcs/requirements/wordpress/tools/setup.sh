@@ -43,4 +43,5 @@ PHP
 	wp redis enable
 fi
 chown -R nobody:nogroup /var/www
+chmod -R g+w /var/www/html/wordpress
 exec php-fpm84 --nodaemonize
