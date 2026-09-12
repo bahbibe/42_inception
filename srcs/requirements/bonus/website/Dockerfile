@@ -1,10 +1,8 @@
 FROM alpine:3.23
 
-RUN apk update  && apk add --no-cache php 
+RUN apk add --no-cache nginx
 
+COPY ./conf/nginx.conf /etc/nginx/http.d/default.conf
 COPY ./src/ /var/www/html/website
 
-WORKDIR /var/www/html/website
-
-CMD [ "php", "-S", "website:1337"]
-
+CMD ["nginx", "-g", "daemon off;"]
