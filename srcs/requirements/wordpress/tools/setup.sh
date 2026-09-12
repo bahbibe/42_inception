@@ -16,7 +16,13 @@ esac
 # depends_on only orders start, wait until mariadb accepts connections.
 # --skip-ssl: the mariadb 11 client tries TLS by default, the server has no cert,
 # and every failed handshake counts toward max_connect_errors (host gets blocked).
+tries=0
 until mariadb-admin ping -h mariadb --skip-ssl -u"$DB_USER" -p"$DB_PASS" --silent > /dev/null 2>&1; do
+	tries=$((tries + 1))
+	if [ "$tries" -ge 60 ]; then
+		echo "mariadb did not answer after 60 tries, check DB_USER and the db_password secret" >&2
+		exit 1
+	fi
 	sleep 1
 done
 
