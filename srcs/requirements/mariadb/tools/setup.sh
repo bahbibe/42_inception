@@ -4,8 +4,9 @@ set -e
 DB_PASS=$(cat /run/secrets/db_password)
 DB_ROOT_PASS=$(cat /run/secrets/db_root_password)
 
-# double single quotes so values are safe inside SQL string literals
-esc() { printf '%s' "$1" | sed "s/'/''/g"; }
+# escape backslashes first, then double the single quotes, so any value is
+# safe inside a SQL string literal
+esc() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e "s/'/''/g"; }
 
 mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld /var/lib/mysql
