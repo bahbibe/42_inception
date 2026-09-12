@@ -2,6 +2,12 @@
 set -e
 sed -i "s/listen = 127.0.0.1:9000/listen = wordpress:9000/" /etc/php84/php-fpm.d/www.conf
 
+# credentials come from docker secrets, not from the environment
+read_cred() { grep -m1 "^$1=" /run/secrets/credentials | cut -d= -f2-; }
+DB_PASS=$(cat /run/secrets/db_password)
+WP_PASS=$(read_cred WP_PASS)
+WP_USER_PASS=$(read_cred WP_USER_PASS)
+
 # depends_on only orders start, wait until mariadb accepts connections.
 # --skip-ssl: the mariadb 11 client tries TLS by default, the server has no cert,
 # and every failed handshake counts toward max_connect_errors (host gets blocked).

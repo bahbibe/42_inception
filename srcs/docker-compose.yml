@@ -29,6 +29,9 @@ services:
       - mariadb
     volumes:
       - wordpress:/var/www/html/wordpress
+    secrets:
+      - db_password
+      - credentials
     <<: *DRY
   mariadb:
     container_name: mariadb
@@ -36,6 +39,9 @@ services:
     build: ./requirements/mariadb
     volumes:
       - mariadb:/var/lib/mysql
+    secrets:
+      - db_password
+      - db_root_password
     <<: *DRY
   redis:
     container_name: redis
@@ -48,6 +54,8 @@ services:
     container_name: ftp
     image: ftp
     build: ./requirements/bonus/ftp
+    secrets:
+      - credentials
     ports:
       - "20-21:20-21"
       - "4000-4010:4000-4010"
@@ -82,6 +90,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer:/data
     <<: *DRY
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  credentials:
+    file: ../secrets/credentials.txt
 networks:
   inception:
     name: inception

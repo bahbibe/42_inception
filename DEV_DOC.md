@@ -19,15 +19,27 @@
    | Variable            | Used by          | Notes                                       |
    |---------------------|------------------|---------------------------------------------|
    | `DB_NAME`           | mariadb, wp      | database name                               |
-   | `DB_USER`/`DB_PASS` | mariadb, wp      | WordPress database user                     |
-   | `DB_ROOT_PASS`      | mariadb          | MariaDB root password                       |
+   | `DB_USER`           | mariadb, wp      | WordPress database user                     |
    | `CERT_PATH`/`KEY_PATH` | nginx (build) | where the self-signed cert is written       |
    | `WP_URL`            | nginx, wp        | must be `bahbibe.42.fr`                     |
-   | `WP_ADMIN`/`WP_PASS`/`WP_EMAIL` | wp   | admin name must not contain "admin"         |
-   | `WP_USER`/`WP_USER_PASS`/`WP_USER_EMAIL` | wp | second user, role author         |
-   | `FTP_USER`/`FTP_PASS` | ftp            | FTP login                                   |
+   | `WP_ADMIN`/`WP_EMAIL` | wp             | admin name must not contain "admin"         |
+   | `WP_USER`/`WP_USER_EMAIL` | wp         | second user, role author                    |
+   | `FTP_USER`          | ftp              | FTP login                                   |
 
-   `srcs/.env` is in `.gitignore`. Never commit it.
+   No password is in `.env`. Passwords are docker secrets, in `secrets/` at
+   the root of the repository:
+
+   | File                            | Content                                   |
+   |---------------------------------|-------------------------------------------|
+   | `secrets/db_password.txt`       | the `DB_USER` password, one line           |
+   | `secrets/db_root_password.txt`  | the MariaDB root password, one line        |
+   | `secrets/credentials.txt`       | `WP_PASS=`, `WP_USER_PASS=`, `FTP_PASS=`   |
+
+   Compose mounts them read-only at `/run/secrets/<name>` in the services that
+   need them, and the setup scripts read the files. The repository ships the
+   three files with placeholder values, replace them before the first start.
+
+   `srcs/.env` and `secrets/*.txt` are in `.gitignore`. Never commit them.
 
 3. Point the domain to the VM:
 

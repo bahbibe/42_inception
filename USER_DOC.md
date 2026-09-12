@@ -43,13 +43,14 @@ If the domain does not open, check that `/etc/hosts` has this line:
 
 ## Credentials
 
-All credentials are in `srcs/.env`. This file is not in git. Ask the
-administrator for it, or create it from `srcs/.env.template`.
+User names are in `srcs/.env`, passwords are in the `secrets/` folder at the
+root of the repository. Neither is in git. Ask the administrator for them, or
+create them from `srcs/.env.template` and the placeholder files in `secrets/`.
 
-- WordPress administrator: `WP_ADMIN` / `WP_PASS`
-- WordPress second user (author): `WP_USER` / `WP_USER_PASS`
-- Database user (for Adminer, server `mariadb`): `DB_USER` / `DB_PASS`
-- FTP user: `FTP_USER` / `FTP_PASS`
+- WordPress administrator: `WP_ADMIN` in `.env`, `WP_PASS` in `secrets/credentials.txt`
+- WordPress second user (author): `WP_USER` in `.env`, `WP_USER_PASS` in `secrets/credentials.txt`
+- Database user (for Adminer, server `mariadb`): `DB_USER` in `.env`, password in `secrets/db_password.txt`
+- FTP user: `FTP_USER` in `.env`, `FTP_PASS` in `secrets/credentials.txt`
 
 The WordPress users are created only on the first start. Changing `.env` later
 does not change them. Change passwords in the admin panel instead.

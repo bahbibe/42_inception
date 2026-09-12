@@ -38,7 +38,8 @@ Main design choices:
 - WordPress is installed with WP-CLI on the first start. The script waits until
   MariaDB answers before it runs.
 - Configuration comes from `srcs/.env`, which is not tracked by git.
-  `srcs/.env.template` lists the variables.
+  `srcs/.env.template` lists the variables. Passwords are kept out of `.env`
+  and passed as docker secrets from `secrets/`.
 - Containers talk over one user-defined bridge network called `inception`.
 
 **Virtual Machines vs Docker.** A VM emulates a full machine and runs its own
@@ -49,8 +50,9 @@ uses much less memory, but the isolation is weaker.
 **Secrets vs Environment Variables.** Environment variables are easy to use but
 they are visible in `docker inspect`, in `/proc/<pid>/environ` and in child
 processes. Docker secrets are mounted as files in `/run/secrets/` and are only
-given to the services that need them. This project uses a `.env` file that is
-ignored by git.
+given to the services that need them. This project keeps the passwords in
+`secrets/` and mounts them as docker secrets, and keeps the rest of the
+configuration in a `.env` file. Both are ignored by git.
 
 **Docker Network vs Host Network.** With the host network a container uses the
 host network stack directly, so every port it opens is open on the host and there
@@ -71,6 +73,7 @@ and `sudo`.
 
 ```sh
 cp srcs/.env.template srcs/.env      # then fill in every value
+# then replace the placeholder passwords in secrets/*.txt
 echo "127.0.0.1 bahbibe.42.fr" | sudo tee -a /etc/hosts
 make                                  # create data dirs, build, start
 ```
