@@ -1,6 +1,6 @@
 FROM alpine:3.23
 
-ARG WP_CLI="https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
+ARG WP_CLI="https://github.com/wp-cli/wp-cli/releases/download/v2.12.0/wp-cli-2.12.0.phar"
 ENV WP_CLI_ALLOW_ROOT=1
 
 RUN apk update && \
