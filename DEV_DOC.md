@@ -36,8 +36,12 @@
    | `secrets/credentials.txt`       | `WP_PASS=`, `WP_USER_PASS=`, `FTP_PASS=`   |
 
    Compose mounts them read-only at `/run/secrets/<name>` in the services that
-   need them, and the setup scripts read the files. The repository ships the
-   three files with placeholder values, replace them before the first start.
+   need them, and the setup scripts read the files. Create the three files from
+   the templates and put your own values in them:
+
+   ```sh
+   for f in secrets/*.template; do cp "$f" "${f%.template}"; done
+   ```
 
    `srcs/.env` and `secrets/*.txt` are in `.gitignore`. Never commit them.
 
