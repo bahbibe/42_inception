@@ -18,6 +18,7 @@
 
    | Variable            | Used by          | Notes                                       |
    |---------------------|------------------|---------------------------------------------|
+   | `LOGIN`             | compose, Makefile | your 42 login, volumes go in `/home/<LOGIN>/data` |
    | `DB_NAME`           | mariadb, wp      | database name                               |
    | `DB_USER`           | mariadb, wp      | WordPress database user                     |
    | `CERT_PATH`/`KEY_PATH` | nginx (build) | where the self-signed cert is written       |
@@ -59,7 +60,8 @@ make          # same as make up
 
 `make up` runs these steps in order:
 
-1. `dirs`: creates `/home/$USER/data/wordpress` and `/home/$USER/data/mariadb`.
+1. `dirs`: creates `/home/<LOGIN>/data/wordpress` and `/home/<LOGIN>/data/mariadb`.
+   `LOGIN` is read from `srcs/.env`, so the path is the same with or without `sudo`.
 2. `build`: `docker compose -f srcs/docker-compose.yml build`.
 3. `docker compose ... up` in the foreground.
 
@@ -104,8 +106,8 @@ docker network inspect inception                                     # see conta
 
 | Volume      | Mounted in container      | Data on the host                |
 |-------------|---------------------------|---------------------------------|
-| `mariadb`   | `/var/lib/mysql`          | `/home/$USER/data/mariadb`      |
-| `wordpress` | `/var/www/html/wordpress` | `/home/$USER/data/wordpress`    |
+| `mariadb`   | `/var/lib/mysql`          | `/home/<LOGIN>/data/mariadb`       |
+| `wordpress` | `/var/www/html/wordpress` | `/home/<LOGIN>/data/wordpress`     |
 | `portainer` | `/data`                   | Docker default volume location  |
 
 The `mariadb` and `wordpress` volumes are named volumes that use the `local`

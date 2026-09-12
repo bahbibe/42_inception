@@ -1,9 +1,12 @@
 YAML = ./srcs/docker-compose.yml
-VOL_DIR = /home/$(USER)/data
+ENV = ./srcs/.env
+LOGIN = $(shell grep -m1 '^LOGIN=' $(ENV) 2>/dev/null | cut -d= -f2-)
+VOL_DIR = /home/$(LOGIN)/data
 
 all: up
 
 dirs:
+	@test -n "$(LOGIN)" || { echo "LOGIN is not set in $(ENV)"; exit 1; }
 	@mkdir -p $(VOL_DIR)/wordpress
 	@mkdir -p $(VOL_DIR)/mariadb
 

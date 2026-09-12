@@ -81,7 +81,7 @@ make                                  # create data dirs, build, start
 Open https://bahbibe.42.fr (the certificate is self-signed).
 
 - `make down` stops the stack.
-- `make rm` also deletes the volumes and the data in `/home/$USER/data`.
+- `make rm` also deletes the volumes and the data in `/home/${LOGIN}/data`.
 - `make re` rebuilds everything from scratch.
 
 See [USER_DOC.md](USER_DOC.md) and [DEV_DOC.md](DEV_DOC.md) for more.
