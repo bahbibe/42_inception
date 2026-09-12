@@ -10,8 +10,7 @@ RUN apk update && \
 	php84-iconv \
 	php84-openssl php84-opcache \
 	php84-gettext php84-zip \
-	php84-ctype php84-tokenizer \
-	wget && \
+	php84-ctype php84-tokenizer && \
 	wget $WP_CLI -O /usr/local/bin/wp && chmod +x /usr/local/bin/wp && \
 	printf "memory_limit = 512M\nupload_max_filesize = 32M\npost_max_size = 32M\n" > /etc/php84/conf.d/99-inception.ini
 
