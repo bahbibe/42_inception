@@ -4,13 +4,16 @@ server {
     ssl_certificate     ${CERT_PATH};
     ssl_certificate_key ${KEY_PATH};
     ssl_protocols       TLSv1.2 TLSv1.3;
+    # docker embedded DNS, re-resolve wordpress so a recreated container is found
+    resolver            127.0.0.11 valid=10s;
     index               index.php ;
     root                /var/www/html/wordpress;
 
     location ~ \.php$ {
         include			fastcgi_params;
         fastcgi_index	index.php;
-        fastcgi_pass	wordpress:9000;
+        set $upstream	wordpress:9000;
+        fastcgi_pass	$upstream;
         fastcgi_param	SCRIPT_FILENAME $document_root/$fastcgi_script_name;
     }
 }
