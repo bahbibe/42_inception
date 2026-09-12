@@ -72,18 +72,18 @@ services:
       - wordpress:/var/www/html/wordpress
     <<: *common
   website:
-      container_name: website
-      image: website
-      build: ./requirements/bonus/website
-      ports:
-        - "1337:1337"
-      <<: *common
+    container_name: website
+    image: website
+    build: ./requirements/bonus/website
+    ports:
+      - "1337:1337"
+    <<: *common
   adminer:
     container_name: adminer
     image: adminer
     build: ./requirements/bonus/adminer
     ports:
-      - 4242:4242
+      - "4242:4242"
     depends_on:
       - mariadb
     <<: *common
@@ -92,7 +92,7 @@ services:
     image: mailpit
     build: ./requirements/bonus/mailpit
     ports:
-      - 8025:8025
+      - "8025:8025"
     volumes:
       - mailpit:/data
     <<: *common
