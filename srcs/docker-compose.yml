@@ -12,7 +12,8 @@ services:
     ports:
       - "443:443"
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
     volumes:
       - wordpress:/var/www/html/wordpress
     <<: *common
@@ -21,13 +22,20 @@ services:
     image: wordpress
     build: ./requirements/wordpress
     depends_on:
-      - mariadb
-      - redis
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_started
     volumes:
       - wordpress:/var/www/html/wordpress
     secrets:
       - db_password
       - credentials
+    healthcheck:
+      test: ["CMD-SHELL", "php -r 'exit(@fsockopen(\"127.0.0.1\", 9000) ? 0 : 1);'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
     <<: *common
   mariadb:
     container_name: mariadb
@@ -38,6 +46,11 @@ services:
     secrets:
       - db_password
       - db_root_password
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping --skip-ssl --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     <<: *common
   redis:
     container_name: redis
