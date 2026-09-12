@@ -33,8 +33,12 @@ define( 'WP_REDIS_HOST', '$WP_REDIS_HOST' );
 EOF
 	wp core install --url="https://$WP_URL" --title=inception --admin_user="$WP_ADMIN" --admin_password="$WP_PASS" --admin_email="$WP_EMAIL" --skip-email
 	wp user create --role=author "$WP_USER" "$WP_USER_EMAIL" --user_pass="$WP_USER_PASS"
-	mkdir -p wp-content/mu-plugins
-	cat > wp-content/mu-plugins/mailpit.php <<'PHP'
+	wp plugin install redis-cache --activate
+	wp redis enable
+fi
+# written on every start, so an existing install gets it too
+mkdir -p wp-content/mu-plugins
+cat > wp-content/mu-plugins/mailpit.php <<'PHP'
 <?php
 // send all wordpress mail to the mailpit container
 add_action( 'phpmailer_init', function ( $mailer ) {
@@ -45,9 +49,7 @@ add_action( 'phpmailer_init', function ( $mailer ) {
 	$mailer->SMTPAutoTLS = false;
 } );
 PHP
-	wp plugin install redis-cache --activate
-	wp redis enable
-fi
+
 chown -R nobody:nogroup /var/www
 chmod -R g+w /var/www/html/wordpress
 exec php-fpm84 --nodaemonize
