@@ -8,6 +8,11 @@ DB_PASS=$(cat /run/secrets/db_password)
 WP_PASS=$(read_cred WP_PASS)
 WP_USER_PASS=$(read_cred WP_USER_PASS)
 
+# the subject forbids admin/administrator in the administrator name
+case "$(echo "$WP_ADMIN" | tr 'A-Z' 'a-z')" in
+	*admin*) echo "WP_ADMIN must not contain 'admin'" >&2; exit 1 ;;
+esac
+
 # depends_on only orders start, wait until mariadb accepts connections.
 # --skip-ssl: the mariadb 11 client tries TLS by default, the server has no cert,
 # and every failed handshake counts toward max_connect_errors (host gets blocked).
