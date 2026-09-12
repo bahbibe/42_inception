@@ -13,7 +13,7 @@ RUN apk update && \
 	php84-ctype php84-tokenizer \
 	wget mariadb-client && \
 	wget $WP_CLI -O /usr/local/bin/wp && chmod +x /usr/local/bin/wp && \
-	echo "memory_limit = 512M" > /etc/php84/conf.d/99-inception.ini
+	printf "memory_limit = 512M\nupload_max_filesize = 32M\npost_max_size = 32M\n" > /etc/php84/conf.d/99-inception.ini
 
 COPY ./tools/setup.sh /setup.sh
 

@@ -6,6 +6,7 @@ server {
     ssl_protocols       TLSv1.2 TLSv1.3;
     # docker embedded DNS, re-resolve wordpress so a recreated container is found
     resolver            127.0.0.11 valid=10s;
+    client_max_body_size 32m;
     index               index.php ;
     root                /var/www/html/wordpress;
 
