@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-sed -i "s/listen = 127.0.0.1:9000/listen = wordpress:9000/" /etc/php84/php-fpm.d/www.conf
+sed -i "s/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/" /etc/php84/php-fpm.d/www.conf
 
 # credentials come from docker secrets, not from the environment
 read_cred() { grep -m1 "^$1=" /run/secrets/credentials | cut -d= -f2-; }
