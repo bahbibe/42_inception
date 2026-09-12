@@ -1,11 +1,13 @@
-FROM alpine:3.23
+FROM alpine:3.23 AS builder
 
 ARG MAILPIT_URL="https://github.com/axllent/mailpit/releases/download/v1.31.1/mailpit-linux-amd64.tar.gz"
 
-RUN apk add --no-cache wget && \
-	wget $MAILPIT_URL -O /tmp/mailpit.tar.gz && \
-	tar -xzf /tmp/mailpit.tar.gz -C /usr/local/bin mailpit && \
-	rm /tmp/mailpit.tar.gz
+RUN wget $MAILPIT_URL -O /tmp/mailpit.tar.gz && \
+	tar -xzf /tmp/mailpit.tar.gz -C /usr/local/bin mailpit
+
+FROM alpine:3.23
+
+COPY --from=builder /usr/local/bin/mailpit /usr/local/bin/mailpit
 
 # smtp on 1025 for the other containers, web ui on 8025
 ENV MP_SMTP_BIND_ADDR=0.0.0.0:1025 \
