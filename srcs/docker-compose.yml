@@ -51,7 +51,7 @@ services:
     secrets:
       - credentials
     ports:
-      - "20-21:20-21"
+      - "21:21"
       - "4000-4010:4000-4010"
     depends_on:
       - wordpress

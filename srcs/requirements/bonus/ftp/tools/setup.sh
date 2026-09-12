@@ -11,6 +11,9 @@ echo "$FTP_USER:$FTP_PASS" | chpasswd > /dev/null 2>&1
 chown -R nobody:nogroup /var/www/html/wordpress
 chmod -R g+w /var/www/html/wordpress
 
+# passive mode must advertise an address the client can reach
+sed -i "s|^pasv_address=.*|pasv_address=${FTP_PASV_ADDRESS:-127.0.0.1}|" /etc/vsftpd/vsftpd.conf
+
 grep -qx "$FTP_USER" /etc/vsftpd.userlist 2> /dev/null || echo "$FTP_USER" >> /etc/vsftpd.userlist
 
 exec vsftpd /etc/vsftpd/vsftpd.conf
