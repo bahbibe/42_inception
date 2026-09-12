@@ -14,10 +14,10 @@ case "$(echo "$WP_ADMIN" | tr 'A-Z' 'a-z')" in
 esac
 
 # depends_on only orders start, wait until mariadb accepts connections.
-# --skip-ssl: the mariadb 11 client tries TLS by default, the server has no cert,
-# and every failed handshake counts toward max_connect_errors (host gets blocked).
+# the check uses php-mysqli, already in the image, so no mariadb client is
+# needed and no failed TLS handshake is counted against max_connect_errors.
 tries=0
-until mariadb-admin ping -h mariadb --skip-ssl -u"$DB_USER" -p"$DB_PASS" --silent > /dev/null 2>&1; do
+until php -r 'exit(@mysqli_connect("mariadb", $argv[1], $argv[2]) ? 0 : 1);' "$DB_USER" "$DB_PASS" > /dev/null 2>&1; do
 	tries=$((tries + 1))
 	if [ "$tries" -ge 60 ]; then
 		echo "mariadb did not answer after 60 tries, check DB_USER and the db_password secret" >&2
