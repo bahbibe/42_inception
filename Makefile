@@ -5,8 +5,10 @@ VOL_DIR = /home/$(LOGIN)/data
 
 all: up
 
-dirs:
+check-login:
 	@test -n "$(LOGIN)" || { echo "LOGIN is not set in $(ENV)"; exit 1; }
+
+dirs: check-login
 	@mkdir -p $(VOL_DIR)/wordpress
 	@mkdir -p $(VOL_DIR)/mariadb
 
@@ -23,10 +25,10 @@ down:
 
 prune: rm
 	@docker compose -f $(YAML) down --rmi all
-rm:
+rm: check-login
 	@docker compose -f $(YAML) down -v --remove-orphans
 	@sudo rm -rf $(VOL_DIR)/wordpress/*
 	@sudo rm -rf $(VOL_DIR)/mariadb/*
 re: prune up
 
-.PHONY: all dirs up build ps logs down prune rm re
+.PHONY: all check-login dirs up build ps logs down prune rm re
