@@ -1,4 +1,4 @@
-x-DRY: &DRY
+x-common: &common
   restart: unless-stopped
   init: true
   networks:
@@ -15,7 +15,7 @@ services:
       - wordpress
     volumes:
       - wordpress:/var/www/html/wordpress
-    <<: *DRY
+    <<: *common
   wordpress:
     container_name: wordpress
     image: wordpress
@@ -28,7 +28,7 @@ services:
     secrets:
       - db_password
       - credentials
-    <<: *DRY
+    <<: *common
   mariadb:
     container_name: mariadb
     image: mariadb
@@ -38,12 +38,12 @@ services:
     secrets:
       - db_password
       - db_root_password
-    <<: *DRY
+    <<: *common
   redis:
     container_name: redis
     image: redis
     build: ./requirements/bonus/redis
-    <<: *DRY
+    <<: *common
   ftp:
     container_name: ftp
     image: ftp
@@ -57,14 +57,14 @@ services:
       - wordpress
     volumes:
       - wordpress:/var/www/html/wordpress
-    <<: *DRY
+    <<: *common
   website:
       container_name: website
       image: website
       build: ./requirements/bonus/website
       ports:
         - "1337:1337"
-      <<: *DRY
+      <<: *common
   adminer:
     container_name: adminer
     image: adminer
@@ -73,7 +73,7 @@ services:
       - 4242:4242
     depends_on:
       - mariadb
-    <<: *DRY
+    <<: *common
   mailpit:
     container_name: mailpit
     image: mailpit
@@ -82,7 +82,7 @@ services:
       - 8025:8025
     volumes:
       - mailpit:/data
-    <<: *DRY
+    <<: *common
 secrets:
   db_password:
     file: ../secrets/db_password.txt
