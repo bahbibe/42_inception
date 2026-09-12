@@ -108,7 +108,7 @@ docker network inspect inception                                     # see conta
 |-------------|---------------------------|---------------------------------|
 | `mariadb`   | `/var/lib/mysql`          | `/home/<LOGIN>/data/mariadb`       |
 | `wordpress` | `/var/www/html/wordpress` | `/home/<LOGIN>/data/wordpress`     |
-| `portainer` | `/data`                   | Docker default volume location  |
+| `mailpit`   | `/data`                   | Docker default volume location  |
 
 The `mariadb` and `wordpress` volumes are named volumes that use the `local`
 driver with `type: none` and `o: bind`, so Docker stores their content in the

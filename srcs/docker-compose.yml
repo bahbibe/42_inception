@@ -80,15 +80,14 @@ services:
     depends_on:
       - mariadb
     <<: *DRY
-  portainer:
-    container_name: portainer
-    image: portainer
-    build: ./requirements/bonus/portainer
+  mailpit:
+    container_name: mailpit
+    image: mailpit
+    build: ./requirements/bonus/mailpit
     ports:
-      - 9443:9443
+      - 8025:8025
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer:/data
+      - mailpit:/data
     <<: *DRY
 secrets:
   db_password:
@@ -101,8 +100,8 @@ networks:
   inception:
     name: inception
 volumes:
-  portainer:
-    name: portainer
+  mailpit:
+    name: mailpit
   wordpress:
     name: wordpress
     driver: local

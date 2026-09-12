@@ -11,7 +11,7 @@
 | ftp       | Upload files to the WordPress folder  | ftp://localhost:21             |
 | website   | Static showcase site                  | http://localhost:1337          |
 | adminer   | Web UI for the database               | http://localhost:4242          |
-| portainer | Web UI to manage containers           | https://localhost:9443         |
+| mailpit   | Catches the mail WordPress sends      | http://localhost:8025          |
 
 ## Start and stop
 

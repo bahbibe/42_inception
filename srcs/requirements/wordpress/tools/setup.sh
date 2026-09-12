@@ -27,6 +27,18 @@ define( 'WP_REDIS_HOST', 'redis' );
 EOF
 	wp core install --url="https://$WP_URL" --title=inception --admin_user="$WP_ADMIN" --admin_password="$WP_PASS" --admin_email="$WP_EMAIL" --skip-email
 	wp user create --role=author "$WP_USER" "$WP_USER_EMAIL" --user_pass="$WP_USER_PASS"
+	mkdir -p wp-content/mu-plugins
+	cat > wp-content/mu-plugins/mailpit.php <<'PHP'
+<?php
+// send all wordpress mail to the mailpit container
+add_action( 'phpmailer_init', function ( $mailer ) {
+	$mailer->isSMTP();
+	$mailer->Host = 'mailpit';
+	$mailer->Port = 1025;
+	$mailer->SMTPAuth = false;
+	$mailer->SMTPAutoTLS = false;
+} );
+PHP
 	wp plugin install redis-cache --activate
 	wp redis enable
 fi

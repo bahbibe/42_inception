@@ -20,7 +20,8 @@ The bonus services:
 - **ftp**: vsftpd server pointing to the WordPress files volume.
 - **website**: a static showcase site.
 - **adminer**: web UI for the database.
-- **portainer**: web UI to manage the Docker containers (service of my choice).
+- **mailpit**: SMTP server and web UI that catches the mail WordPress sends
+  (service of my choice).
 
 ### Project description
 
