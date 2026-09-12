@@ -3,8 +3,7 @@ FROM alpine:3.23
 ARG WP_CLI="https://github.com/wp-cli/wp-cli/releases/download/v2.12.0/wp-cli-2.12.0.phar"
 ENV WP_CLI_ALLOW_ROOT=1
 
-RUN apk update && \
-	apk add --no-cache php84 php84-fpm \
+RUN apk add --no-cache php84 php84-fpm \
 	php84-mysqli php84-phar \
 	php84-mbstring php84-pdo \
 	php84-iconv \
