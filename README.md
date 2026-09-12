@@ -58,6 +58,14 @@ flowchart LR
 | **mailpit** | catches the mail WordPress sends, SMTP + web inbox | 8025 |
 | **website** | static showcase site served by nginx | 1337 |
 
+## Screenshots
+
+| WordPress, Redis object cache connected | Mailpit catching WordPress mail |
+|---|---|
+| ![Redis Object Cache page showing Connected, host redis, port 6379](docs/screenshots/wp-redis.png) | ![Mailpit inbox with two mails sent by WordPress](docs/screenshots/mailpit.png) |
+| **Adminer on the MariaDB container** | **The static site on 1337** |
+| ![Adminer listing the twelve WordPress tables](docs/screenshots/adminer.png) | ![Static showcase site served by nginx](docs/screenshots/website.png) |
+
 ## Notable bits
 
 - **Secrets, not env vars.** Passwords live in `secrets/` and are mounted at
